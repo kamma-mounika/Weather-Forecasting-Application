@@ -96,6 +96,6 @@ We welcome contributions! Please follow these steps to contribute:
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ### Contact 📧
-If you have any questions or need assistance, feel free to contact me at [ersinaksar@yandex.com](mailto:ersinaksar@yandex.com).
+If you have any questions or need assistance, feel free to contact me at [mounikakamma83@gmail.com](mailto:mounikakamma83@gmail.com).
 
 Thank you for using the Weather Forecast App! We hope you find it useful. 🌤️🌧️☀️ 
