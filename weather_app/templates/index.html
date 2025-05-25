@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Forecast App</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
+    <script>
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: -34.397, lng: 150.644 },
+                zoom: 8
+            });
+
+            map.addListener('click', function(event) {
+                document.getElementById('lat').value = event.latLng.lat();
+                document.getElementById('lon').value = event.latLng.lng();
+            });
+        }
+        async function getWeatherData(event) {
+            event.preventDefault();
+            const lat = document.getElementById('lat').value;
+            const lon = document.getElementById('lon').value;
+            const dataType = document.getElementById('data_type').value;
+            const response = await fetch(`/api/weather/?lat=${lat}&lon=${lon}&data_type=${dataType}`);
+            const data = await response.json();
+            document.getElementById('weather-data').textContent = JSON.stringify(data, null, 2);
+        }
+        async function getWeatherChart(event) {
+            event.preventDefault();
+            const lat = document.getElementById('chart-lat').value;
+            const lon = document.getElementById('chart-lon').value;
+            const dataType = document.getElementById('chart-data_type').value;
+            const response = await fetch(`/chart/?lat=${lat}&lon=${lon}&data_type=${dataType}`);
+            const chartDiv = document.getElementById('weather-chart');
+            chartDiv.innerHTML = await response.text();
+        }
+    </script>
+
+    <style>
+        #weather-data {
+            white-space: pre-wrap;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Weather Forecast App</h1>
+    <div id="map" style="height: 500px; width: 100%;"></div>
+
+    <!-- Weather Data Form -->
+    <form id="weather-form" method="get" onsubmit="getWeatherData(event)">
+        <label for="lat">Latitude:</label>
+        <input type="text" id="lat" name="lat" required>
+        <br>
+        <label for="lon">Longitude:</label>
+        <input type="text" id="lon" name="lon" required>
+        <br>
+        <label for="data_type">Data Type:</label>
+        <select id="data_type" name="data_type" required>
+            <option value="current">Current weather</option>
+            <option value="minutely">Minute forecast for 1 hour</option>
+            <option value="hourly">Hourly forecast for 48 hours</option>
+            <option value="daily">Daily forecast for 7 days</option>
+        </select>
+        <br>
+        <button type="submit">Get Weather</button>
+    </form>
+
+    <!-- Weather Chart Form -->
+    <form id="chart-form" method="get"  action="/chart/">
+        <label for="chart-lat">Latitude:</label>
+        <input type="text" id="chart-lat" name="lat" required>
+        <br>
+        <label for="chart-lon">Longitude:</label>
+        <input type="text" id="chart-lon" name="lon" required>
+        <br>
+        <label for="chart-data_type">Data Type:</label>
+        <select id="chart-data_type" name="data_type" required>
+            <option value="hourly">Hourly forecast for 48 hours</option>
+            <option value="daily">Daily forecast for 7 days</option>
+        </select>
+        <br>
+        <button type="submit">Get Weather Chart</button>
+    </form>
+    <pre id="weather-data"></pre>
+    <div id="weather-chart"></div>
+</body>
+</html>
